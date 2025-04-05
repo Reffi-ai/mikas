@@ -1,19 +1,17 @@
-// Fungsi untuk memilih atau membatalkan semua checkbox
-function toggleCheckboxes(source) {
-    const checkboxes = document.querySelectorAll('input[name="ids[]"]');
-    checkboxes.forEach(checkbox => checkbox.checked = source.checked);
-}
+// Fungsi untuk memilih atau membatalkan semua checkbox (Functional Style)
+const toggleCheckboxes = (source) => {
+    Array.from(document.querySelectorAll('input[name="ids[]"]'))
+        .forEach(checkbox => checkbox.checked = source.checked);
+};
 
- // Mencegah zoom dengan Ctrl + Scroll
-window.addEventListener('wheel', function(e) {
-    if (e.ctrlKey) {
-        e.preventDefault();
-    }
-}, { passive: false });
+// Fungsi murni untuk mencegah zoom saat scroll
+const preventZoomOnWheel = (e) => 
+    e.ctrlKey && e.preventDefault();
 
-// Mencegah zoom dengan Ctrl + Plus/Minus
-window.addEventListener('keydown', function(e) {
-    if (e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '0')) {
-        e.preventDefault();
-    }
-});
+// Fungsi murni untuk mencegah zoom dengan tombol plus/minus/0
+const preventZoomOnKeydown = (e) => 
+    e.ctrlKey && ['+', '-', '0'].includes(e.key) && e.preventDefault();
+
+// Pasang event listener
+window.addEventListener('wheel', preventZoomOnWheel, { passive: false });
+window.addEventListener('keydown', preventZoomOnKeydown);

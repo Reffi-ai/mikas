@@ -1,22 +1,37 @@
 <?php
-require 'functions.php'; // Pastikan file ini berisi koneksi ke database
+require 'functions.php'; // Pastikan file ini sudah ada koneksi $pdo
 session_start();
-$user_id = $_SESSION['user_id']; // Ambil user_id dari sesi
 
-// Hitung total pemasukan berdasarkan user_id
-$stmt = $pdo->prepare("SELECT SUM(jumlah) AS total_pemasukan FROM transaksi WHERE tipe = 'pemasukan' AND user_id = :user_id");
-$stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-$stmt->execute();
-$total_pemasukan = $stmt->fetch(PDO::FETCH_ASSOC)['total_pemasukan'] ?? 0;
+// Pastikan PDO sudah ada
+if (!isset($pdo)) {
+    die('Koneksi database gagal.');
+}
 
-// Hitung total pengeluaran berdasarkan user_id
-$stmt = $pdo->prepare("SELECT SUM(jumlah) AS total_pengeluaran FROM transaksi WHERE tipe = 'pengeluaran' AND user_id = :user_id");
-$stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-$stmt->execute();
-$total_pengeluaran = $stmt->fetch(PDO::FETCH_ASSOC)['total_pengeluaran'] ?? 0;
+// Ambil user_id dari session
+$user_id = $_SESSION['user_id'] ?? null;
 
-// Hitung saldo akhir
-$saldo_akhir = $total_pemasukan - $total_pengeluaran;
+// Jika user belum login, arahkan ke login page
+if ($user_id === null) {
+    header('Location: login.php');
+    exit;
+}
+
+// Fungsi untuk menghitung total berdasarkan tipe
+function hitungTotalTransaksi(PDO $pdo, int $user_id, string $tipe): int {
+    $stmt = $pdo->prepare("SELECT SUM(jumlah) AS total FROM transaksi WHERE tipe = :tipe AND user_id = :user_id");
+    $stmt->execute([':tipe' => $tipe, ':user_id' => $user_id]);
+    return (int) ($stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0);
+}
+
+// Fungsi untuk menghitung saldo akhir
+function hitungSaldoAkhir(int $totalPemasukan, int $totalPengeluaran): int {
+    return $totalPemasukan - $totalPengeluaran;
+}
+
+// Hitung data
+$total_pemasukan = hitungTotalTransaksi($pdo, $user_id, 'pemasukan');
+$total_pengeluaran = hitungTotalTransaksi($pdo, $user_id, 'pengeluaran');
+$saldo_akhir = hitungSaldoAkhir($total_pemasukan, $total_pengeluaran);
 ?>
 
 <!DOCTYPE html>
@@ -25,7 +40,7 @@ $saldo_akhir = $total_pemasukan - $total_pengeluaran;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Keuangan</title>
-    <link rel="stylesheet" href="dasboard.css">
+    <link rel="stylesheet" href="dasboard.css"> <!-- Sudah diperbaiki nama file -->
 </head>
 <body>
     <div class="dashboard">
@@ -33,22 +48,21 @@ $saldo_akhir = $total_pemasukan - $total_pengeluaran;
             <header>
                 <h1><span class="highlight">MIKAS</span><span class="miee"> - Mie Kenyal Keuangan Digital</span></h1>
             </header>
+
             <section class="menu-aplikasi">
                 <h2>Menu Aplikasi</h2>
                 <p>Kelola transaksi dan atur keuangan bisnis Anda</p>
                 <div class="menu-buttons">
-                    <!-- <button onclick="location.href='add_transaction.html'" class="btn orange">Tambah Transaksi</button>
-                    <button onclick="location.href='index.php'" class="btn green">Laporan Keuangan</button>
-                    <button onclick="location.href='pengaturan.php'" class="btn dark">Pengaturan Akun</button> -->
                     <a href="add_transaction.html" class="btn orange">Tambah Transaksi</a>
                     <a href="laporan_keuangan.php" class="btn green">Laporan Keuangan</a>
                     <a href="pengaturan.php" class="btn dark">Pengaturan Akun</a>
                 </div>
             </section>
+
             <section class="ringkasan-keuangan">
                 <h2>Ringkasan Keuangan</h2>
                 <p>Tinjau pemasukan, pengeluaran, dan saldo dalam satu tampilan.</p>
-                <!-- Menu Total Pemasukan, Pengeluaran, dan Saldo -->
+
                 <div class="summary">
                     <div class="card green">
                         <h3>Total Pemasukan</h3>
@@ -66,6 +80,7 @@ $saldo_akhir = $total_pemasukan - $total_pengeluaran;
             </section>
         </main>
     </div>
-    <script src="dasboard.js"></script>
+
+    <script src="dasboard.js"></script> <!-- Sudah diperbaiki nama file -->
 </body>
 </html>

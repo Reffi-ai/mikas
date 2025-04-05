@@ -1,17 +1,15 @@
-// Sembunyikan notifikasi setelah 5 detik
-setTimeout(() => {
-    const successAlert = document.getElementById('success-alert');
-    const errorAlert = document.getElementById('error-alert');
-    if (successAlert) successAlert.style.display = 'none';
-    if (errorAlert) errorAlert.style.display = 'none';
-}, 3000); // 5000 ms = 5 detik
+// Fungsi untuk menyembunyikan elemen jika ada
+const hideElement = (id) => {
+    const el = document.getElementById(id);
+    el && (el.style.display = 'none');
+};
 
-function toggleCheckboxes(masterCheckbox) {
-    // Ambil semua checkbox dengan nama "ids[]"
-    const checkboxes = document.querySelectorAll('input[name="ids[]"]');
-    
-    // Atur status checkbox lain sesuai dengan checkbox utama
-    checkboxes.forEach(checkbox => {
-        checkbox.checked = masterCheckbox.checked;
-    });
-}
+// Menyembunyikan notifikasi setelah 3 detik (Functional Style)
+const hideNotifications = () => ['success-alert', 'error-alert'].forEach(hideElement);
+
+setTimeout(hideNotifications, 3000);
+
+// Fungsi toggle semua checkbox (Functional Style)
+const toggleCheckboxes = (masterCheckbox) => 
+    Array.from(document.querySelectorAll('input[name="ids[]"]'))
+        .forEach(checkbox => checkbox.checked = masterCheckbox.checked);
