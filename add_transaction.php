@@ -1,20 +1,39 @@
 <?php
 require 'functions.php';
+
+function handleRequest($pdo, $postData, $sessionData)
+{
+    if ($postData["tipe"] && $postData["jumlah"] && $postData["deskripsi"] && isset($sessionData['user_id'])) {
+        $userId = $sessionData['user_id'];
+        $tipe = $postData['tipe'];
+        $jumlah = $postData['jumlah'];
+        $deskripsi = $postData['deskripsi'];
+
+        $result = catatTransaksi($pdo, $userId, $tipe, $jumlah, $deskripsi);
+
+        return [
+            'redirect' => 'laporan_keuangan.php',
+            'success_message' => 'Transaksi berhasil ditambahkan!',
+            'error_message' => null,
+        ];
+    }
+
+    return [
+        'redirect' => null,
+        'success_message' => null,
+        'error_message' => 'Data tidak lengkap atau user belum login',
+    ];
+}
+
+// --- Eksekusi kode procedural minimal ---
 session_start();
+$response = handleRequest($pdo, $_POST, $_SESSION);
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $user_id = $_SESSION['user_id']; // Ambil user_id dari sesi
-    $tipe = $_POST['tipe'];
-    $jumlah = $_POST['jumlah'];
-    $deskripsi = $_POST['deskripsi'];
-    
-    // Panggil fungsi catatTransaksi dengan user_id
-    $hasil = catatTransaksi($pdo, $user_id, $tipe, $jumlah, $deskripsi);
-
-    // Simpan pesan sukses ke dalam session
-    $_SESSION['success_message'] = "Transaksi berhasil ditambahkan!";
-    
-    header("Location: laporan_keuangan.php");
+if ($response['redirect']) {
+    $_SESSION['success_message'] = $response['success_message'];
+    header("Location: " . $response['redirect']);
     exit;
+} else {
+    echo $response['error_message'];
 }
 ?>

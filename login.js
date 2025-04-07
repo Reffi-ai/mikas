@@ -1,52 +1,68 @@
-document.querySelector('form').addEventListener('submit', function (e) {
+// Fungsi utilitas
+const isEmpty = (value) => value.trim() === '';
+const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+const isValidPasswordLength = (password, minLength = 6) => password.length >= minLength;
+
+// Fungsi validasi form
+const validateForm = (email, password) => {
+    if (isEmpty(email) || isEmpty(password)) {
+        return 'Email dan password harus diisi!';
+    }
+    if (!isValidEmail(email)) {
+        return 'Format email tidak valid!';
+    }
+    if (!isValidPasswordLength(password)) {
+        return 'Password harus memiliki minimal 6 karakter!';
+    }
+    return null;
+};
+
+// Handler submit form
+const handleFormSubmit = (e) => {
     const email = document.querySelector('input[name="email"]').value.trim();
     const password = document.querySelector('input[name="password"]').value.trim();
+    const errorMessage = validateForm(email, password);
 
-    if (!email || !password) {
-        e.preventDefault(); // Mencegah pengiriman form
-        alert('Email dan password harus diisi!');
-        return;
-    }
-
-    // Validasi format email
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailPattern.test(email)) {
+    if (errorMessage) {
         e.preventDefault();
-        alert('Format email tidak valid!');
-        return;
+        alert(errorMessage);
     }
+};
 
-    // Validasi panjang password
-    if (password.length < 6) {
-        e.preventDefault();
-        alert('Password harus memiliki minimal 6 karakter!');
-        return;
-    }
-});
-
-// Mencegah zoom dengan Ctrl + Scroll
-window.addEventListener('wheel', function(e) {
+// Cegah zoom dengan Ctrl + Scroll
+const preventZoomScroll = (e) => {
     if (e.ctrlKey) {
         e.preventDefault();
     }
-}, { passive: false });
+};
 
-// Mencegah zoom dengan Ctrl + Plus/Minus
-window.addEventListener('keydown', function(e) {
-    if (e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '0')) {
+// Cegah zoom dengan Ctrl + + / - / 0
+const preventZoomKey = (e) => {
+    if (e.ctrlKey && ['+', '-', '0'].includes(e.key)) {
         e.preventDefault();
     }
-});
+};
 
-// Menampilkan atau menyembunyikan password
-const togglePassword = document.getElementById('togglePassword');
-const passwordInput = document.getElementById('password');
+// Toggle tampilan password
+const togglePasswordVisibility = () => {
+    const passwordInput = document.getElementById('password');
+    const togglePassword = document.getElementById('togglePassword');
 
-togglePassword.addEventListener('click', function () {
-    // Toggle tipe input antara 'password' dan 'text'
-    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-    passwordInput.setAttribute('type', type);
+    const toggleType = (input) => input.getAttribute('type') === 'password' ? 'text' : 'password';
+    const toggleIcon = (type) => type === 'password' ? 'icon/show.png' : 'icon/hide.png';
 
-    // Ganti ikon
-    this.src = type === 'password' ? 'icon/show.png' : 'icon/hide.png';
-});
+    const newType = toggleType(passwordInput);
+    passwordInput.setAttribute('type', newType);
+    togglePassword.src = toggleIcon(newType);
+};
+
+// Pasang semua event listener
+const setupEventListeners = () => {
+    document.querySelector('form').addEventListener('submit', handleFormSubmit);
+    window.addEventListener('wheel', preventZoomScroll, { passive: false });
+    window.addEventListener('keydown', preventZoomKey);
+    document.getElementById('togglePassword').addEventListener('click', togglePasswordVisibility);
+};
+
+// Inisialisasi
+setupEventListeners();

@@ -78,7 +78,7 @@ h2 {
     color: #fff;
 }
 
-.table-striped tbody tr:nth-child(odd) {
+.table tbody tr:nth-child(odd) {
     background-color: #f8f9fa;
 }
 
@@ -107,6 +107,29 @@ h2 {
     color: white;
 }
 
+@media (max-width: 768px) {
+    .button-group { 
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 90%; /* Lebarkan dikit */
+    }
+
+    .button-group .btn {
+        width: 80%; /* Biar tombolnya lebih lebar pas di HP */
+        margin-bottom: 10px; /* Kasih jarak antar tombol */
+    }
+}
+
+/* @media (max-width: 768px) {
+    .button-group { 
+        flex-direction: column; 
+        justify-content: center;
+        align-items: center;
+        width: 70%; 
+    }
+} */
+
 /* .edit, .delete {
     display: inline-block; /* Membuat tombol berada di satu baris */
 
@@ -121,6 +144,15 @@ h2 {
     color: black;
     margin-top: 8%;
     margin-bottom: 4%;
+}
+
+@media (max-width: 768px) {
+    .tambah-transaksi {
+        width: 80%;  
+        padding: 12px; 
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
 }
 
 .position-fixed {
@@ -153,8 +185,32 @@ h2 {
     color: #fff;
     margin-top: 1%;
     margin-bottom: 1%;
-    line-height: 1.5; /* Atur jarak antar baris */
+    line-height: 1.5;
 }
+
+/* Responsif untuk .summary */
+@media (max-width: 768px) {
+    .summary {
+        flex-direction: column;
+        align-items: center;
+    }
+    .summary .card {
+        width: 80%; /* Biar kartu-kartunya lebih gede di HP */
+        margin-bottom: 10px; /* Kasih jarak antar kartu */
+    }
+}
+
+/* @media (max-width: 700px) {
+    .summary { 
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .card { 
+        width: 50%; 
+        margin-bottom: 10px; 
+    }
+} */
 
 .hijau{
     background-color: #28a745;
@@ -203,4 +259,10 @@ a {
 .checkbox-column {
     width: 5%; /* Atur lebar kolom */
     text-align: center; /* Pusatkan isi kolom */
+}
+
+.table-responsive {
+    margin-bottom: 20px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* Supaya scrollnya lebih smooth di iPhone */
 }

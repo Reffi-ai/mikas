@@ -216,13 +216,13 @@ input::placeholder {
 /* login dan logout */
 
 .sudahpunyaakun {
-    font-size: 10vw;
+    font-size: 0.8vw;
     text-align: center;
     padding-top: 7px;
 }
 
 @media (max-width: 600px) {
     .sudahpunyaakun {
-    font-size: 5vw;
+    font-size: 2.3vw;
     }
 }
