@@ -48,6 +48,7 @@ $saldo_akhir = hitungSaldoAkhir($total_pemasukan, $total_pengeluaran);
             <header>
                 <h1><span class="highlight">MIKAS</span><span class="miee"> - Mie Kenyal Keuangan Digital</span></h1>
             </header>
+
             <section class="menu-aplikasi">
                 <h2>Menu Aplikasi</h2>
                 <p>Kelola transaksi dan atur keuangan bisnis Anda</p>
