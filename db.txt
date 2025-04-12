@@ -20,3 +20,14 @@ CREATE TABLE `transaksi` (
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE utang (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    user_id INT(11) NOT NULL,
+    nama VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+    jumlah DOUBLE NOT NULL,
+    keterangan TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+    status ENUM('Belum Lunas', 'Lunas') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'Belum Lunas',
+    tanggal DATETIME NOT NULL,
+    PRIMARY KEY (id)
+);

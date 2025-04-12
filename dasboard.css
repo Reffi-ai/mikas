@@ -120,6 +120,15 @@ a {
     color: black;
 }
 
+.utang {
+    background-color: #dc3545;
+    color: white;
+}
+
+.utang:hover {
+    background-color: #c82333;
+}
+
 .card.green { background: #28a745; }
 .card.red { background: #dc3545; }
 .card.blue { background: #007bff; }
