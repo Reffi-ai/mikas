@@ -51,6 +51,7 @@ $transaksi = getTransaksi($pdo, $user_id);
             <button type="submit" class="btn delete merah" onclick="return confirm('Apakah Anda yakin ingin menghapus data yang dipilih?')">🗑️ Hapus Data Terpilih</button>
             <a href="download_pdf.php" class="btn Download-PDF biru">📄 Download PDF</a>
         </div>
+        <div class="table-responsive">
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
@@ -78,6 +79,7 @@ $transaksi = getTransaksi($pdo, $user_id);
                     <?php endif; ?>
                 </tbody>
             </table>
+        </div>
         </form>
         <div class="summary">
             <div class="card hijau">

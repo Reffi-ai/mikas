@@ -70,10 +70,10 @@ function totalPengeluaran($pdo, $user_id) {
 }
 
 // Fungsi untuk menghitung saldo akhir
-function saldoAkhir($pdo, $user_id) {
-    $pemasukan   = totalPemasukan($pdo, $user_id);
-    $pengeluaran = totalPengeluaranGabungan($pdo, $user_id);
-    return $pemasukan - $pengeluaran;
+function saldoAkhir($pdo, $user_id) { 
+    $pemasukan   = totalPemasukan($pdo, $user_id); // Mengambil total pemasukan
+    $pengeluaran = totalPengeluaranGabungan($pdo, $user_id); // Mengambil total pengeluaran gabungan
+    return $pemasukan - $pengeluaran; // Menggabungkan hasil untuk menghitung saldo akhir
 }
 
 // Fungsi untuk menghitung total pemasukan dari utang yang belum lunas

@@ -109,6 +109,13 @@ body {
 
 .masuk {
     margin-top: 30px;
+    width: 100%;
+}
+
+@media (max-width: 600px) {
+    .masuk {
+        width: 100%;
+    }
 }
 
 .bawah {
@@ -156,7 +163,7 @@ input::placeholder {
     position: relative;
     display: flex;
     align-items: center;
-    max-width: 98%; /* Lebar khusus untuk register */
+    max-width: 98%;
     margin: 0 auto; /* Pusatkan secara horizontal */
 }
 

@@ -16,7 +16,14 @@ body {
     color: #FFC300;
 }
 
-.container {
+/* .container {
+    text-align: center;
+    justify-content: center;
+    justify-items: center; 
+} */
+
+.containerregister {
+    margin: 0 auto; /* Pusatkan secara horizontal */
     text-align: center;
     justify-content: center; /* Pusatkan secara horizontal */
     justify-items: center; /* Pusatkan secara vertikal */
@@ -24,15 +31,14 @@ body {
 
 .containerindex{
     transform: scale(1.2);
+    transform-origin: center; /* Pastikan elemen tetap terpusat */
 }
 
 .containerlogin {
     transform: scale(1.2);
+    transform-origin: center; /* Pastikan elemen tetap terpusat */
 }
 
-/* .containerregister {
-    transform: scale(0.8);
-} */
 
 @font-face {
     font-family: 'FredokaOne';
@@ -122,6 +128,12 @@ body {
     margin-top: 10px;
 }
 
+@media (max-width: 600px) {
+    .bawah2-buat-akun {
+        width: 100%;
+    }
+}
+
 a {
     color: white; /* Ganti dengan warna yang diinginkan */
     text-decoration: none; /* Hapus garis bawah jika tidak diinginkan */
@@ -164,12 +176,6 @@ input::placeholder {
     }
 }
 
-.password-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
 .password-container input {
     width: 100%; /* Atur lebar input */
     margin: 0 auto; /* Pusatkan secara horizontal */
@@ -183,9 +189,21 @@ input::placeholder {
     margin: 0 auto; /* Pusatkan secara horizontal */
 }
 
+.password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
 .register-password {
     max-width: 96%; /* Lebar khusus untuk register */
     margin: 0 auto; /* Pusatkan secara horizontal */
+}
+
+@media (max-width: 600px) {
+    .register-password {
+        width: 100%;
+    }
 }
 
 .password-icon {

@@ -264,5 +264,5 @@ a {
 .table-responsive {
     margin-bottom: 20px;
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch; /* Supaya scrollnya lebih smooth di iPhone */
+    -webkit-overflow-scrolling: touch;
 }
