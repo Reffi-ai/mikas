@@ -73,7 +73,7 @@ $user_id = userHarusLogin();
 $transaksi = getTransaksi($pdo, $user_id);
 $totalPemasukan = totalPemasukan($pdo, $user_id);
 $totalPengeluaran = totalPengeluaran($pdo, $user_id);
-$saldoAkhir = saldoAkhir($pdo, $user_id);
+$saldoAkhir = $totalPemasukan - $totalPengeluaran;
 $css = file_get_contents('download_pdf.css');
 $html = buatHtmlLaporan($transaksi, $totalPemasukan, $totalPengeluaran, $saldoAkhir, $css);
 buatDanKirimPdf($html, "laporan_keuangan.pdf");

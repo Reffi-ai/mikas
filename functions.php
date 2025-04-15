@@ -69,81 +69,6 @@ function totalPengeluaran($pdo, $user_id) {
     }
 }
 
-// Fungsi untuk menghitung saldo akhir
-function saldoAkhir($pdo, $user_id) { 
-    $pemasukan   = totalPemasukan($pdo, $user_id); // Mengambil total pemasukan
-    $pengeluaran = totalPengeluaranGabungan($pdo, $user_id); // Mengambil total pengeluaran gabungan
-    return $pemasukan - $pengeluaran; // Menggabungkan hasil untuk menghitung saldo akhir
-}
-
-// Fungsi untuk menghitung total pemasukan dari utang yang belum lunas
-function totalPemasukanUtang($pdo, $user_id) {
-    try {
-        $stmt = $pdo->prepare(
-            "SELECT SUM(jumlah) AS total FROM utang 
-            WHERE user_id = :user_id AND status != 'Lunas'"
-        );
-        $stmt->execute([':user_id' => $user_id]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['total'] ?? 0;
-    } catch (Exception $e) {
-        return 0;
-    }
-}
-
-// Fungsi untuk menghitung total pengeluaran dari utang yang sudah lunas
-function totalPengeluaranUtang($pdo, $user_id) {
-    try {
-        $stmt = $pdo->prepare(
-            "SELECT SUM(jumlah) AS total FROM utang 
-            WHERE user_id = :user_id AND status = 'Lunas'"
-        );
-        $stmt->execute([':user_id' => $user_id]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['total'] ?? 0;
-    } catch (Exception $e) {
-        return 0;
-    }
-}
-
-// Fungsi untuk menghitung total pengeluaran gabungan
-function totalPengeluaranGabungan($pdo, $user_id) {
-    $totalPengeluaranLaporan = totalPengeluaran($pdo, $user_id); // Dari laporan keuangan
-    $totalPengeluaranUtang = totalPengeluaranUtang($pdo, $user_id); // Utang belum lunas
-    return $totalPengeluaranLaporan + $totalPengeluaranUtang;
-}
-
-// Fungsi untuk menghitung total utang
-function totalUtang($pdo, $user_id) {
-    try {
-        $stmt = $pdo->prepare(
-            "SELECT SUM(jumlah) AS total FROM utang 
-            WHERE user_id = :user_id AND status != 'Lunas'"
-        );
-        $stmt->execute([':user_id' => $user_id]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['total'] ?? 0;
-    } catch (Exception $e) {
-        return 0;
-    }
-}
-
-// Fungsi untuk menghitung ringkasan keuangan
-function ringkasanKeuangan($pdo, $user_id) {
-    $totalPemasukan = totalPemasukan($pdo, $user_id);
-    $totalPengeluaran = totalPengeluaranGabungan($pdo, $user_id);
-    $saldoAkhir = saldoAkhir($pdo, $user_id);
-    $totalUtang = totalUtang($pdo, $user_id);
-
-    return [
-        'total_pemasukan' => $totalPemasukan,
-        'total_pengeluaran' => $totalPengeluaran,
-        'saldo_akhir' => $saldoAkhir,
-        'total_utang' => $totalUtang,
-        'total_ringkasan' => $saldoAkhir - $totalUtang
-    ];
-}
-
 function ambilSemuaUtang($pdo, $user_id) {
     $sql = "SELECT * FROM utang WHERE user_id = :user_id ORDER BY tanggal DESC";
     $stmt = $pdo->prepare($sql);
@@ -210,7 +135,7 @@ function tambahUtang($pdo, $user_id, $nama, $jumlah, $keterangan) {
     ]);
 
     // Catat sebagai pengeluaran di transaksi
-catatPengeluaranDariUtang($pdo, $user_id, $jumlah, "Utang $nama: $keterangan");
+    catatPengeluaranDariUtang($pdo, $user_id, $jumlah, "Utang $nama: $keterangan");
 }
 
 function hapusTransaksiBerdasarkanDeskripsi($pdo, $user_id, $deskripsi) {

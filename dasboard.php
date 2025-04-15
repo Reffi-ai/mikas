@@ -11,10 +11,10 @@ function validasiLogin() {
     return $_SESSION['user_id'];
 }
 
-// Hitung data untuk dashboard
+// Hitung total pemasukan, pengeluaran, dan saldo akhir
 $user_id = validasiLogin();
-$totalPemasukan = totalPemasukan($pdo, $user_id); // Fungsi dari functions.php
-$totalPengeluaran = totalPengeluaranGabungan($pdo, $user_id); // Gabungan pengeluaran laporan dan utang belum lunas
+$totalPemasukan = totalPemasukan($pdo, $user_id);
+$totalPengeluaran = totalPengeluaran($pdo, $user_id);
 $saldoAkhir = $totalPemasukan - $totalPengeluaran;
 ?>
 

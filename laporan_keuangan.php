@@ -12,7 +12,7 @@ if (isset($_SESSION['user_id'])) {
 // Hitung total pemasukan, pengeluaran, dan saldo akhir
 $totalPemasukan = totalPemasukan($pdo, $user_id);
 $totalPengeluaran = totalPengeluaran($pdo, $user_id);
-$saldoAkhir = saldoAkhir($pdo, $user_id);
+$saldoAkhir = $totalPemasukan - $totalPengeluaran;
 $transaksi = getTransaksi($pdo, $user_id);
 ?>
 
