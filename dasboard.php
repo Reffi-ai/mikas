@@ -64,7 +64,5 @@ $saldoAkhir = $totalPemasukan - $totalPengeluaran;
             </section>
         </main>
     </div>
-
-    <script src="dasboard.js"></script> <!-- Sudah diperbaiki nama file -->
 </body>
 </html>

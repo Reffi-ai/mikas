@@ -1,9 +1,9 @@
 // Fungsi utilitas
-const isEmpty = (value) => value.trim() === '';
-const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-const isValidPasswordLength = (password, minLength = 6) => password.length >= minLength;
+const isEmpty = (value) => value.trim() === ''; // Cek apakah string kosong
+const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); // Cek format email
+const isValidPasswordLength = (password, minLength = 6) => password.length >= minLength; // Cek panjang password
 
-// Fungsi validasi form
+// Fungsi validasi form login
 const validateForm = (email, password) => {
     if (isEmpty(email) || isEmpty(password)) {
         return 'Email dan password harus diisi!';
@@ -17,7 +17,7 @@ const validateForm = (email, password) => {
     return null;
 };
 
-// Handler submit form
+// Fungsi untuk menangani submit form
 const handleFormSubmit = (e) => {
     const email = document.querySelector('input[name="email"]').value.trim();
     const password = document.querySelector('input[name="password"]').value.trim();
@@ -38,7 +38,7 @@ const preventZoomScroll = (e) => {
 
 // Cegah zoom dengan Ctrl + + / - / 0
 const preventZoomKey = (e) => {
-    if (e.ctrlKey && ['+', '-', '0'].includes(e.key)) {
+    if (e.ctrlKey && ['=', '-', '0'].includes(e.key)) {
         e.preventDefault();
     }
 };

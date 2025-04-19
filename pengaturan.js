@@ -1,6 +1,4 @@
-const goBack = () => window.history.back();
-
-const saveChanges = () => alert("Perubahan telah disimpan!");
+const goBack = () => window.history.back(); // Fungsi untuk kembali ke halaman sebelumnya
 
 const handleExitClick = (event) => {
     console.log('Tombol exit diklik');
@@ -25,8 +23,8 @@ const cancelLogout = (event) => {
 
 const logout = () => redirectTo('logout.php');
 
-// Event binding
-const bindEvents = () => {
+
+const bindEvents = () => { // Mengikat event ke elemen-elemen
     const exitButton = document.querySelector('.btn.exit');
     exitButton?.addEventListener('click', handleExitClick);
 };

@@ -1,3 +1,4 @@
+// Mengambil elemen-elemen yang diperlukan
 document.querySelector('form').addEventListener('submit', function (e) {
     const fullName = document.querySelector('input[name="full_name"]').value.trim();
     const warmindoName = document.querySelector('input[name="warmindo_name"]').value.trim();
@@ -43,7 +44,7 @@ window.addEventListener('wheel', function(e) {
 
 // Mencegah zoom dengan Ctrl + Plus/Minus
 window.addEventListener('keydown', function(e) {
-    if (e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '0')) {
+    if (e.ctrlKey && (e.key === '=' || e.key === '-' || e.key === '0')) {
         e.preventDefault();
     }
 });
