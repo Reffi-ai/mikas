@@ -1,7 +1,7 @@
 <?php
 require 'config.php';
 
-// Fungsi untuk mencatat transaksi baru
+// Digunakan untuk menambahkan data transaksi baru (pemasukan/pengeluaran) ke tabel transaksi
 function catatTransaksi($pdo, $user_id, $tipe, $jumlah, $deskripsi) {
     try {
         $stmt = $pdo->prepare(
@@ -69,14 +69,16 @@ function totalPengeluaran($pdo, $user_id) {
     }
 }
 
+// Mengambil seluruh data utang user dari tabel utang
 function ambilSemuaUtang($pdo, $user_id) {
     $sql = "SELECT * FROM utang WHERE user_id = :user_id ORDER BY tanggal DESC";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':user_id' => $user_id]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+// Menandai status sebuah utang menjadi Lunas dan menghapus transaksi pengeluaran yang berkaitan
 function tandaiUtangLunas($pdo, $user_id, $id) {
-    // Ambil detail utang untuk mendapatkan deskripsi
     $sql = "SELECT nama, keterangan FROM utang WHERE id = :id AND user_id = :user_id";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
@@ -94,12 +96,13 @@ function tandaiUtangLunas($pdo, $user_id, $id) {
             ':user_id' => $user_id
         ]);
 
-        // Hapus transaksi terkait dari tabel transaksi
+        // Hapus transaksi dengan deskripsi yang sesuai (pakai hapusTransaksiBerdasarkanDeskripsi())
         $deskripsi = "Utang {$utang['nama']}: {$utang['keterangan']}";
         hapusTransaksiBerdasarkanDeskripsi($pdo, $user_id, $deskripsi);
     }
 }
 
+// Mengelompokkan utang berdasarkan nama (pelanggan) dan menjumlahkan total utangnya yang belum lunas
 function totalUtangPerPelanggan($pdo, $user_id) {
     $sql = "SELECT nama, SUM(jumlah) AS total 
             FROM utang 
@@ -110,6 +113,8 @@ function totalUtangPerPelanggan($pdo, $user_id) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+
+// Menghapus data utang yang sudah lunas dari database
 function hapusUtangLunas($pdo, $user_id, $id) {
     $sql = "DELETE FROM utang WHERE id = :id AND user_id = :user_id AND status = 'Lunas'";
     $stmt = $pdo->prepare($sql);
@@ -119,10 +124,12 @@ function hapusUtangLunas($pdo, $user_id, $id) {
     ]);
 }
 
+// pemanggilan ulang dari catatTransaksi() dengan tipe 'pengeluaran'
 function catatPengeluaranDariUtang($pdo, $user_id, $jumlah, $deskripsi) {
     catatTransaksi($pdo, $user_id, 'pengeluaran', $jumlah, $deskripsi);
 }
 
+// Menambahkan data ke tabel utang dan juga langsung mencatat pengeluarannya sebagai transaksi
 function tambahUtang($pdo, $user_id, $nama, $jumlah, $keterangan) {
     $sql = "INSERT INTO utang (user_id, nama, jumlah, keterangan, status, tanggal) 
             VALUES (:user_id, :nama, :jumlah, :keterangan, 'Belum Lunas', NOW())";
@@ -138,6 +145,7 @@ function tambahUtang($pdo, $user_id, $nama, $jumlah, $keterangan) {
     catatPengeluaranDariUtang($pdo, $user_id, $jumlah, "Utang $nama: $keterangan");
 }
 
+// Menghapus transaksi berdasarkan user_id dan deskripsi. Digunakan saat utang sudah lunas agar pengeluarannya juga dihapus
 function hapusTransaksiBerdasarkanDeskripsi($pdo, $user_id, $deskripsi) {
     $sql = "DELETE FROM transaksi WHERE user_id = :user_id AND deskripsi = :deskripsi";
     $stmt = $pdo->prepare($sql);

@@ -1,10 +1,12 @@
 <?php
 session_start();
 
+// Mengecek apakah ada email yang tersimpan di $_SESSION, yang mengindikasikan bahwa user sudah login.
 function isUserLoggedIn(): bool {
     return isset($_SESSION['email']);
 }
 
+// Jika user belum login, akan langsung diarahkan ke halaman login menggunakan header() lalu exit() untuk menghentikan eksekusi lebih lanjut.
 function redirectIfNotLoggedIn(string $redirectUrl): void {
     if (!isUserLoggedIn()) {
         header("Location: $redirectUrl");
@@ -12,11 +14,12 @@ function redirectIfNotLoggedIn(string $redirectUrl): void {
     }
 }
 
+// Mengambil data dari $_SESSION dengan keamanan tambahan melalui htmlspecialchars agar aman ditampilkan di HTML (mencegah XSS).
 function getSessionData(string $key): string {
     return htmlspecialchars($_SESSION[$key] ?? '');
 }
 
-// Eksekusi utama
+// untuk memastikan hanya user yang sudah login bisa mengakses halaman ini.
 redirectIfNotLoggedIn('login.html');
 ?>
 

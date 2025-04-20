@@ -2,14 +2,17 @@
 session_start();
 include 'config.php';
 
+// Membersihkan input dari karakter berbahaya (menghindari XSS).
 function sanitizeInput(string $input): string {
     return htmlspecialchars($input);
 }
 
+// Mengenkripsi password sebelum disimpan ke database menggunakan algoritma hashing bawaan PHP.
 function hashPassword(string $password): string {
     return password_hash($password, PASSWORD_DEFAULT);
 }
 
+// Mengecek apakah email sudah pernah terdaftar sebelumnya.
 function isEmailRegistered(mysqli $conn, string $email): bool {
     $stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
     $stmt->bind_param("s", $email);
@@ -20,6 +23,7 @@ function isEmailRegistered(mysqli $conn, string $email): bool {
     return $isRegistered;
 }
 
+// Menyimpan data pengguna baru ke dalam database.
 function registerUser(mysqli $conn, string $fullName, string $warmindoName, string $email, string $hashedPassword): bool {
     $stmt = $conn->prepare("INSERT INTO users (full_name, warmindo_name, email, password) VALUES (?, ?, ?, ?)");
     $stmt->bind_param("ssss", $fullName, $warmindoName, $email, $hashedPassword);
@@ -28,6 +32,8 @@ function registerUser(mysqli $conn, string $fullName, string $warmindoName, stri
     return $success;
 }
 
+// Setelah berhasil menyimpan data di database
+// fungsi setSessionData() dipanggil untuk menyimpan data pengguna ke dalam variabel sesi ($_SESSION).
 function setSessionData(string $fullName, string $warmindoName, string $email): void {
     $_SESSION['full_name'] = $fullName;
     $_SESSION['warmindo_name'] = $warmindoName;
@@ -39,16 +45,19 @@ function handleRegistration(mysqli $conn): void {
         return;
     }
 
+    // Mengambil input dari form HTML (full_name, warmindo_name, email, password).
     $fullName = sanitizeInput($_POST['full_name']);
     $warmindoName = sanitizeInput($_POST['warmindo_name']);
     $email = sanitizeInput($_POST['email']);
     $password = hashPassword($_POST['password']);
 
+    // memeriksa apakah email sudah ada di database.
     if (isEmailRegistered($conn, $email)) {
         echo "Email sudah terdaftar! Silakan gunakan email lain.";
         return;
     }
 
+    // Menyimpan data pengguna baru ke dalam database.
     if (registerUser($conn, $fullName, $warmindoName, $email, $password)) {
         setSessionData($fullName, $warmindoName, $email);
         header("Location: login.html");
@@ -58,7 +67,7 @@ function handleRegistration(mysqli $conn): void {
     }
 }
 
-// Eksekusi utama
+// Menjalankan fungsi registrasi.
 handleRegistration($conn);
 
 // Tutup koneksi setelah semua selesai

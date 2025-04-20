@@ -3,6 +3,11 @@ const hideNotifications = () => ['success-alert', 'error-alert'].forEach(hideEle
 
 setTimeout(hideNotifications, 3000);
 
+const hideElement = (id) => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+};  
+
 // Fungsi toggle semua checkbox (Functional Style)
 const toggleCheckboxes = (masterCheckbox) => 
     Array.from(document.querySelectorAll('input[name="ids[]"]'))

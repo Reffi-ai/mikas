@@ -1,9 +1,9 @@
 <?php
-session_start();
-require_once 'config.php'; // Pastikan koneksi $pdo tersedia
-require_once 'functions.php'; // Pastikan file ini berisi fungsi ambilSemuaUtang() dan totalUtangPerPelanggan()
+session_start(); // digunakan untuk mengaktifkan session agar bisa mengakses $_SESSION.
+require_once 'config.php';
+require_once 'functions.php';
 
-// Validasi user login
+// Fungsi ini memastikan bahwa user sudah login.
 function validasiLogin() {
     if (!isset($_SESSION['user_id'])) {
         die("Error: Anda harus login terlebih dahulu.");
@@ -11,32 +11,29 @@ function validasiLogin() {
     return $_SESSION['user_id'];
 }
 
-// Tangani permintaan POST
+// Fungsi ini menangani permintaan POST dari form yang ada di halaman
 function tanganiPermintaanPost($pdo, $user_id) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $action = $_POST['action'] ?? null;
 
         if ($action === 'tambah') {
-            // Tambahkan utang tanpa mencatat pengeluaran di tabel transaksi
             tambahUtang($pdo, $user_id, $_POST['nama'], $_POST['jumlah'], $_POST['keterangan'], false);
         } elseif ($action === 'lunas') {
-            // Tandai utang sebagai lunas dan hapus transaksi terkait
             tandaiUtangLunas($pdo, $user_id, $_POST['id']);
         } elseif ($action === 'hapus') {
-            // Hapus utang lunas tanpa memengaruhi transaksi
             hapusUtangLunas($pdo, $user_id, $_POST['id']);
         }
 
-        header('Location: utang_index.php');
+        header('Location: utang_index.php'); // Setelah aksi selesai, pengguna diarahkan kembali ke halaman utang_index.php.
         exit;
     }
 }
 
-// Ambil data utang dan total per pelanggan
+// Fungsi ini mengambil data utang dari database untuk ditampilkan di halaman.
 function ambilDataUtang($pdo, $user_id) {
     return [
-        'daftar_utang' => ambilSemuaUtang($pdo, $user_id),
-        'total_per_pelanggan' => totalUtangPerPelanggan($pdo, $user_id)
+        'daftar_utang' => ambilSemuaUtang($pdo, $user_id), // Semua utang (ambilSemuaUtang)
+        'total_per_pelanggan' => totalUtangPerPelanggan($pdo, $user_id) // Total utang per pelanggan (totalUtangPerPelanggan)
     ];
 }
 
@@ -64,7 +61,7 @@ $total_per_pelanggan = $dataUtang['total_per_pelanggan'];
         <a href="dasboard.php" class="kembali">&#8617; Kembali</a>
         <div class="centered utang">
             <h1>Pencatatan Utang</h1>
-            <form method="POST">
+            <form method="POST"> <!-- Form ini dikirim dengan method POST ke server -->
                 <input type="hidden" name="action" value="tambah">
                 <input type="text" name="nama" placeholder="Nama" autocomplete="off" required>
                 <input type="number" name="jumlah" step="1000" min="0" placeholder="Jumlah" required>

@@ -2,7 +2,7 @@
 session_start();
 include 'config.php';
 
-// Fungsi untuk mengambil user berdasarkan email
+// Mencari data user berdasarkan email dari database users.
 function getUserByEmail($conn, $email) {
     $stmt = $conn->prepare("SELECT id, full_name, warmindo_name, password FROM users WHERE email = ?");
     $stmt->bind_param("s", $email);
@@ -42,7 +42,7 @@ function handleLogin($conn, $email, $password) {
     redirectToDashboard();
 }
 
-// Fungsi untuk redirect ke dashboard
+// Mengarahkan pengguna ke halaman dasboard.php setelah login sukses.
 function redirectToDashboard() {
     header("Location: dasboard.php");
     exit();
@@ -67,6 +67,6 @@ function processLogin($conn) {
 // Jalankan proses login
 processLogin($conn);
 
-// Tutup koneksi
+// Menutup koneksi database setelah selesai.
 $conn->close();
 ?>

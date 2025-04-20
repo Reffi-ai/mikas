@@ -1,8 +1,8 @@
 <?php
-require 'functions.php'; // Pastikan file ini sudah ada koneksi $pdo
-session_start();
+require 'functions.php'; 
+session_start(); // Memulai sesi untuk menyimpan data pengguna yang sudah login
 
-// Validasi user login
+// untuk memastikan pengguna sudah login:
 function validasiLogin() {
     if (!isset($_SESSION['user_id'])) {
         header('Location: login.php');
@@ -12,7 +12,7 @@ function validasiLogin() {
 }
 
 // Hitung total pemasukan, pengeluaran, dan saldo akhir
-$user_id = validasiLogin();
+$user_id = validasiLogin(); // dipanggil untuk memastikan pengguna telah login, lalu user_id disimpan ke $user_id.
 $totalPemasukan = totalPemasukan($pdo, $user_id);
 $totalPengeluaran = totalPengeluaran($pdo, $user_id);
 $saldoAkhir = $totalPemasukan - $totalPengeluaran;

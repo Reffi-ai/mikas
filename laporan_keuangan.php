@@ -13,7 +13,7 @@ if (isset($_SESSION['user_id'])) {
 $totalPemasukan = totalPemasukan($pdo, $user_id);
 $totalPengeluaran = totalPengeluaran($pdo, $user_id);
 $saldoAkhir = $totalPemasukan - $totalPengeluaran;
-$transaksi = getTransaksi($pdo, $user_id);
+$transaksi = getTransaksi($pdo, $user_id); // mengambil semua transaksi (termasuk utang) dari database berdasarkan user_id.
 ?>
 
 <!DOCTYPE html>
@@ -45,41 +45,40 @@ $transaksi = getTransaksi($pdo, $user_id);
             <?php unset($_SESSION['error_message']); ?>
         <?php endif; ?>
         
-        <!-- filepath: c:\xampp\htdocs\keuangan\index.php -->
         <form method="post" action="delete_multiple.php">
-        <div class="button-group">
-            <button type="submit" class="btn delete merah" onclick="return confirm('Apakah Anda yakin ingin menghapus data yang dipilih?')">🗑️ Hapus Data Terpilih</button>
-            <a href="download_pdf.php" class="btn Download-PDF biru">📄 Download PDF</a>
-        </div>
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                    <th class="checkbox-column"><input type="checkbox" id="select-all" onclick="toggleCheckboxes(this)"></th>                        <th>Tanggal</th>
-                        <th>Tipe</th>
-                        <th>Jumlah</th>
-                        <th>Deskripsi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if (!empty($transaksi)) : ?>
-                        <?php foreach ($transaksi as $item) : ?>
-                            <tr>
-                                <td><input type="checkbox" name="ids[]" value="<?= $item['id'] ?>"></td>
-                                <td><?= $item['tanggal'] ?></td>
-                                <td><?= ucfirst($item['tipe']) ?></td>
-                                <td>Rp<?= number_format($item['jumlah'], 0, ',', '.') ?></td>
-                                <td><?= $item['deskripsi'] ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php else : ?>
+            <div class="button-group">
+                <button type="submit" class="btn delete merah" onclick="return confirm('Apakah Anda yakin ingin menghapus data yang dipilih?')">🗑️ Hapus Data Terpilih</button>
+                <a href="download_pdf.php" class="btn Download-PDF biru">📄 Download PDF</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead>
                         <tr>
-                            <td colspan="5" style="text-align: center;">Tidak ada data transaksi.</td>
+                        <th class="checkbox-column"><input type="checkbox" id="select-all" onclick="toggleCheckboxes(this)"></th>                        <th>Tanggal</th>
+                            <th>Tipe</th>
+                            <th>Jumlah</th>
+                            <th>Deskripsi</th>
                         </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($transaksi)) : ?>
+                            <?php foreach ($transaksi as $item) : ?>
+                                <tr>
+                                    <td><input type="checkbox" name="ids[]" value="<?= $item['id'] ?>"></td>
+                                    <td><?= $item['tanggal'] ?></td>
+                                    <td><?= ucfirst($item['tipe']) ?></td>
+                                    <td>Rp<?= number_format($item['jumlah'], 0, ',', '.') ?></td>
+                                    <td><?= $item['deskripsi'] ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else : ?>
+                            <tr>
+                                <td colspan="5" style="text-align: center;">Tidak ada data transaksi.</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
         </form>
         <div class="summary">
             <div class="card hijau">
