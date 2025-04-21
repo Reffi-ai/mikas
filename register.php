@@ -46,7 +46,7 @@ function handleRegistration(mysqli $conn): void {
     }
 
     // Mengambil input dari form HTML (full_name, warmindo_name, email, password).
-    $fullName = sanitizeInput($_POST['full_name']);
+    $fullName = sanitizeInput($_POST['full_name']); // menggunakan fungsi sanitizeInput() untuk mencegah serangan XSS.
     $warmindoName = sanitizeInput($_POST['warmindo_name']);
     $email = sanitizeInput($_POST['email']);
     $password = hashPassword($_POST['password']);

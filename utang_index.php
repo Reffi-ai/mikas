@@ -61,7 +61,7 @@ $total_per_pelanggan = $dataUtang['total_per_pelanggan'];
         <a href="dasboard.php" class="kembali">&#8617; Kembali</a>
         <div class="centered utang">
             <h1>Pencatatan Utang</h1>
-            <form method="POST"> <!-- Form ini dikirim dengan method POST ke server -->
+            <form method="POST"> <!-- Ketika tombol Tambah diklik, form dikirim ke server menggunakan metode POST -->
                 <input type="hidden" name="action" value="tambah">
                 <input type="text" name="nama" placeholder="Nama" autocomplete="off" required>
                 <input type="number" name="jumlah" step="1000" min="0" placeholder="Jumlah" required>

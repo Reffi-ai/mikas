@@ -124,7 +124,7 @@ function hapusUtangLunas($pdo, $user_id, $id) {
     ]);
 }
 
-// pemanggilan ulang dari catatTransaksi() dengan tipe 'pengeluaran'
+// fungsi ini memanggil catatTransaksi dengan tipe 'pengeluaran'
 function catatPengeluaranDariUtang($pdo, $user_id, $jumlah, $deskripsi) {
     catatTransaksi($pdo, $user_id, 'pengeluaran', $jumlah, $deskripsi);
 }
@@ -141,7 +141,7 @@ function tambahUtang($pdo, $user_id, $nama, $jumlah, $keterangan) {
         ':keterangan' => $keterangan
     ]);
 
-    // Catat sebagai pengeluaran di transaksi
+    // fungsi ini mencatat pengeluaran terkait utang ke tabel transaksi
     catatPengeluaranDariUtang($pdo, $user_id, $jumlah, "Utang $nama: $keterangan");
 }
 
